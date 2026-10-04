@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import Keypad from './Keypad'
-import { initialHistory, type HistoryRecord } from './history'
-import { convert, formatMoney, parseAmount } from './money'
+import Keypad from '../Keypad'
+import { initialHistory, type HistoryRecord } from '../history'
+import { convert, formatMoney, parseStringAmount } from '../money'
 
 type Tab = 'exchange' | 'history'
 
@@ -73,7 +73,7 @@ export default function App() {
     fetch('/api/quote', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to, amount: parseAmount(amount) }),
+      body: JSON.stringify({ from, to, amount: parseStringAmount(amount) }),
     })
       .then((res) => {
         if (!res.ok) throw new Error(`Quote request failed: ${res.status}`)
@@ -129,7 +129,7 @@ export default function App() {
           if (tab === 'exchange') {
             setHistory((prev) => [
               ...prev,
-              { from, to, amount: formatMoney(parseAmount(amount)), result },
+              { from, to, amount: formatMoney(parseStringAmount(amount)), result },
             ])
           }
           break
