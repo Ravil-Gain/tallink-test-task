@@ -155,6 +155,7 @@ export default function App() {
     }
 
     table.addEventListener('click', handler)
+    return () => table.removeEventListener("click", handler); // unsubscribe
   }, [tab])
 
   return (
