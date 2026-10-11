@@ -1,17 +1,18 @@
-const currency = new RegExp(/[^\d.]/g); // pick everything ex numbers & dot
+const nonNumericCharacters = /[^\d.,-]/g;
+const amountPattern = /^-?(?:(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?|\.\d+)$/;
 const moneyFormatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
 
 export function parseStringAmount(value: string): number {
-  const cleanedStrAmount = value.replace(currency, "");
-  return parseFloat(cleanedStrAmount);
+  const cleanedAmount = value.replace(nonNumericCharacters, "");
+  if (!amountPattern.test(cleanedAmount)) return Number.NaN;
+  return Number(cleanedAmount.replace(/,/g, ""));
 }
 
 export function convert(amount: number, rate: string): number {
-  const cleanedStrRate = rate.replace(currency, "");
-  return amount * parseFloat(cleanedStrRate);
+  return amount * parseStringAmount(rate);
 }
 
 export function formatMoney(value: number): string {

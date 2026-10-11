@@ -1,3 +1,4 @@
+import backIcon from "../../../shared/ui/back.svg";
 import type { KeypadAction, KeypadMode } from "../types";
 
 interface KeypadProps {
@@ -61,33 +62,73 @@ const HISTORY_DISABLED_ACTIONS = new Set<KeypadAction>([
 
 export default function Keypad({ mode, onAction, saveDisabled = false }: KeypadProps) {
   return (
-    <table style={{ borderCollapse: "collapse" }}>
-      <tbody>
-        {BUTTON_ROWS.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {row.map(({ action, testId, historyOnly }) => {
-              if (historyOnly && mode !== "history") return null;
-
-              return (
-                <td key={action}>
-                  <button
-                    type="button"
-                    data-testid={testId}
-                    disabled={
-                      (mode === "history" && HISTORY_DISABLED_ACTIONS.has(action)) ||
-                      (mode === "exchange" && action === "m" && saveDisabled)
-                    }
-                    onClick={() => onAction(action)}
-                    style={{ width: 48, height: 32 }}
-                  >
-                    {action}
-                  </button>
-                </td>
-              );
-            })}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div
+      role="group"
+      aria-label={mode === "history" ? "History keypad" : "Exchange keypad"}
+      className="grid shrink-0 grid-cols-4 gap-y-[min(1cqw,4px)] rounded-t-[26px] bg-[#F3EEEE] px-4 pb-[min(5.5cqw,22px)] pt-[min(5.5cqw,22px)] compact-landscape:py-[2dvh]"
+    >
+      {BUTTON_ROWS.map((row, rowIndex) => (
+        <div key={rowIndex} className="col-span-4 grid grid-cols-4 items-center">
+          {row.map(({ action, testId, historyOnly }) => {
+            return (
+              <div key={action} className="keypad-cell">
+                <button
+                  type="button"
+                  data-testid={testId}
+                  aria-label={
+                    action === "▲"
+                      ? "Previous item"
+                      : action === "▼"
+                        ? "Next item"
+                        : action === "OK"
+                          ? "Confirm selection"
+                          : undefined
+                  }
+                  disabled={
+                    (mode === "history" && HISTORY_DISABLED_ACTIONS.has(action)) ||
+                    (mode === "exchange" && (historyOnly || (action === "m" && saveDisabled)))
+                  }
+                  onClick={() => onAction(action)}
+                  className={`keypad-button ${`keypad-button--value keypad-button--${
+                    action === "C"
+                      ? "clear"
+                      : action === "⌫"
+                        ? "backspace"
+                        : action === "m"
+                          ? "save"
+                          : "digit"
+                  }`}`}
+                >
+                  {historyOnly ? (
+                    mode === "history" ? (
+                      action === "▼" ? (
+                        <span>🔽</span>
+                      ) : action === "▲" ? (
+                        <span>🔼</span>
+                      ) : action === "OK" ? (
+                        <span>🆗</span>
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )
+                  ) : action === "⌫" ? (
+                    <img
+                      src={backIcon}
+                      alt=""
+                      aria-hidden="true"
+                      className="keypad-backspace-icon"
+                    />
+                  ) : (
+                    action
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
   );
 }

@@ -53,13 +53,11 @@ describe("Exchange", () => {
     fireEvent.change(screen.getByRole("combobox", { name: "To currency" }), {
       target: { value: "EUR" },
     });
-    fireEvent.change(screen.getByRole("textbox", { name: "Amount" }), {
-      target: { value: "250" },
-    });
+    expect(screen.getByRole("textbox", { name: "Amount" })).toHaveProperty("readOnly", true);
 
     expect(setFrom).toHaveBeenCalledWith("GBP");
     expect(setTo).toHaveBeenCalledWith("EUR");
-    expect(setAmount).toHaveBeenCalledWith("250");
+    expect(setAmount).not.toHaveBeenCalled();
   });
 
   it("does not show a result when there is no current quote", () => {

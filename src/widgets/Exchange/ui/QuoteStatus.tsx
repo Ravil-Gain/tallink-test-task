@@ -18,7 +18,7 @@ export default function QuoteStatus({
   onRefresh,
 }: QuoteStatusProps) {
   return (
-    <div>
+    <div className="flex min-h-6 shrink-0 items-center justify-center gap-2 text-[10px]">
       {ratesLoading ? (
         <span>Loading currencies…</span>
       ) : ratesError ? (
@@ -34,8 +34,13 @@ export default function QuoteStatus({
           </span>
         )
       )}
-      <button type="button" data-testid="refresh" onClick={onRefresh}>
-        ⟳
+      <button
+        type="button"
+        data-testid="refresh"
+        onClick={onRefresh}
+        className="inline-flex h-5 w-5 items-center justify-center rounded-full text-[15px] transition-transform hover:rotate-45"
+      >
+        ↻
       </button>
     </div>
   );

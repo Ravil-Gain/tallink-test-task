@@ -19,6 +19,7 @@ export default function CurrencySelect({
       data-testid={testId}
       value={value}
       onChange={(event) => onChange(event.target.value)}
+      className="currency-select"
     >
       {currencies.map((currency) => (
         <option key={currency} value={currency}>

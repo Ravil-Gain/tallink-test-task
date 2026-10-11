@@ -19,9 +19,10 @@ function isQuote(value: unknown): value is Quote {
   if (typeof value !== "object" || value === null) return false;
 
   const quote = value as Record<string, unknown>;
+  const rate = typeof quote.rate === "string" ? parseStringAmount(quote.rate) : Number.NaN;
   return (
-    typeof quote.rate === "string" &&
-    Number.isFinite(parseStringAmount(quote.rate)) &&
+    Number.isFinite(rate) &&
+    rate > 0 &&
     typeof quote.amount === "number" &&
     Number.isFinite(quote.amount) &&
     typeof quote.createdAt === "string" &&
@@ -106,7 +107,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
 
     const parsedAmount = parseStringAmount(amount);
-    if (!Number.isFinite(parsedAmount)) {
+    if (!Number.isFinite(parsedAmount) || parsedAmount < 0) {
       setQuote(null);
       setQuoteRequest(null);
       setQuoteError("Enter a valid amount.");

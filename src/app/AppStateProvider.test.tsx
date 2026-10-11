@@ -114,7 +114,27 @@ describe("AppStateProvider", () => {
       vi
         .fn()
         .mockResolvedValueOnce(jsonResponse(rates))
-        .mockResolvedValueOnce(jsonResponse({ ...quote, rate: "not-a-rate" })),
+        .mockResolvedValueOnce(jsonResponse({ ...quote, rate: "1.2.3" })),
+    );
+
+    renderProvider();
+    await flushPromises();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(500);
+    });
+
+    expect(screen.getByTestId("quote-error")).toHaveTextContent("Quote response is invalid");
+    expect(screen.getByTestId("quote-rate")).toHaveTextContent("none");
+  });
+
+  it("rejects a non-positive quote rate", async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(jsonResponse(rates))
+        .mockResolvedValueOnce(jsonResponse({ ...quote, rate: "-1.25" })),
     );
 
     renderProvider();

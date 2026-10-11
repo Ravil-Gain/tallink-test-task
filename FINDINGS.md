@@ -41,3 +41,16 @@
 **Problem:** The app's currency loading, quote lifecycle, history selection, and keypad actions needed repeatable regression checks. Tests also need a one-shot command suitable for CI.
 
 **Solution:** I configured Vitest with jsdom and Testing Library, added focused tests for the money helpers, provider, exchange/history widgets, and keypad, and added a coverage command with 80% thresholds. The CI test command runs Vitest once and exits with its result; coverage output is ignored by Git.
+
+#### Use one amount-entry path
+
+**Problem:** The amount field accepted direct text edits in addition to the on-screen keypad, despite the specified keypad-only input flow.
+
+**Solution:** I made the display read-only and removed its redundant change handler; the keypad is the single amount-entry path.
+
+#### Reject malformed monetary values
+
+**Problem:** `parseFloat` accepted valid prefixes from malformed values such as `1.2.3`, and stripping the minus sign silently changed negative values to positive. That could allow an invalid API rate to produce a plausible but incorrect result.
+
+**Solution:** I added strict validation for the supported en-US amount format, retained signs during parsing, reused the shared parser in `convert`, and reject negative amounts and non-positive quote rates. Comma-decimal localized input is intentionally rejected rather than guessed.
+

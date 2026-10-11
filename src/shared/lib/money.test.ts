@@ -12,9 +12,7 @@ describe("money", () => {
 
     it("handles various currency symbols and formats", () => {
       expect(parseStringAmount("$1,000.50")).toBe(1000.5);
-      // Note: Our regex removes everything except digits and dots
-      // So "€1.000,50" becomes "1.00050" (removing € and comma)
-      expect(parseStringAmount("€1.000,50")).toBe(1.0005);
+      expect(parseStringAmount("€1.000,50")).toBeNaN();
       expect(parseStringAmount("£1,000")).toBe(1000);
       expect(parseStringAmount("¥1000")).toBe(1000);
       expect(parseStringAmount("1000 USD")).toBe(1000);
@@ -27,9 +25,9 @@ describe("money", () => {
       expect(parseStringAmount("1.")).toBe(1);
       expect(parseStringAmount("1,000,000")).toBe(1000000);
       expect(parseStringAmount("1,000,000.50")).toBe(1000000.5);
-      // Negative numbers: the minus sign is removed by regex, so becomes positive
-      expect(parseStringAmount("-1,000")).toBe(1000);
-      expect(parseStringAmount("-1,000.50")).toBe(1000.5);
+      expect(parseStringAmount("-1,000")).toBe(-1000);
+      expect(parseStringAmount("-1,000.50")).toBe(-1000.5);
+      expect(parseStringAmount("1.2.3")).toBeNaN();
     });
   });
 
@@ -50,10 +48,8 @@ describe("money", () => {
     it("handles edge cases in rate", () => {
       expect(convert(100, ".5")).toBe(50); // 100 * 0.5
       expect(convert(100, "5.")).toBe(500); // 100 * 5
-      // Multiple dots: parseFloat takes first dot, so "1.2.3" becomes 1.2
-      expect(convert(100, "1.2.3")).toBeCloseTo(120); // 100 * 1.2
-      // Negative rate: the minus is removed, so becomes positive
-      expect(convert(100, "-1.5")).toBe(150); // 100 * 1.5
+      expect(convert(100, "1.2.3")).toBeNaN();
+      expect(convert(100, "-1.5")).toBe(-150);
     });
   });
 
