@@ -1,0 +1,101 @@
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+
+@custom-variant compact-landscape (@media (max-width: 959px) and (max-height: 599px) and (orientation: landscape));
+
+@layer components {
+  .currency-select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    appearance: none;
+    background: transparent;
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .exchange-amount {
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    font-size: 31px;
+    line-height: 1;
+    text-align: right;
+  }
+
+  .keypad-cell {
+    display: flex;
+    height: min(21.75cqw, 85px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .keypad-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    font-weight: 400;
+    line-height: 1;
+    transition:
+      background-color 150ms,
+      color 150ms;
+  }
+
+  .keypad-button:disabled {
+    cursor: default;
+    opacity: 0.2;
+  }
+
+  .keypad-button--value {
+    width: 100%;
+    height: 100%;
+    max-width: 72px;
+    border-radius: 12px;
+    font-size: 32px;
+  }
+
+  .keypad-backspace-icon {
+    display: flex;
+    width: min(10cqw, 39px);
+    height: min(7.25cqw, 28px);
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    font-size: min(6cqw, 23px);
+  }
+
+  @variant compact-landscape {
+    .keypad-cell {
+      height: 8dvh;
+    }
+  }
+}
+
+:root {
+  --color-black: #090909;
+
+  font-family: "Inter Variable", Arial, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-black);
+  background: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}

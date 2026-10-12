@@ -1,0 +1,21 @@
+export type KeypadMode = "exchange" | "history";
+
+export type KeypadAction =
+  | "C"
+  | "⌫"
+  | "m"
+  | "0"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "00"
+  | "."
+  | "▲"
+  | "▼"
+  | "OK";
